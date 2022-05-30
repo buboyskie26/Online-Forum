@@ -1,0 +1,65 @@
+﻿@model Forum.ViewModels.Profile.ProfieList;
+
+<div class="container body-content">
+    <div class="row sectionHeader">
+        <div class="sectionHeading">Browse Users</div>
+    </div>
+    <div class="row" id="forumIndexContent">
+        <table class="table table-hover" id="forumIndexTable">
+            <thead>
+                <tr class="text-center">
+                    <th>
+                        Profile Pic
+                    </th>
+                    <th>
+                        Username
+                    </th>
+                    <th>
+                        Member Since
+                    </th>
+                    <th>
+                        E-mail
+                    </th>
+                    <th>
+                        User Rating
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var profile in Model.Users)
+                {
+                    <tr class="userRow text-center">
+                        <td>
+                            <div class="userProfilePic" style="background-image: url(@profile.AuthorImageUrl); background-size:100%"></div>
+                        </td>
+                        <td>
+                            <span>Active</span>
+                            @*@if (profile.IsActive)
+                                {
+                                    <span>Active</span>
+                                }
+                                else
+                                {
+                                    <span class="inactiveUser">Inactive</span>
+                                }*@
+                        </td>
+                        <td>
+                            @profile.MemberSince
+                        </td>
+                        <td>
+                            <a asp-action="Detail" asp-route-id="@profile.AuthorId">
+                                @profile.AuthorEmail
+
+                            </a>
+                        </td>
+
+                        <td>
+                            @profile.AuthorRating
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>

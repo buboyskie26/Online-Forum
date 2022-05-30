@@ -1,0 +1,89 @@
+﻿@model Forum.ViewModels.Post.MyPostList
+@{
+    ViewData["Title"] = "MyPost";
+}
+
+<div class="container body-content">
+
+    <div class="sectionHeading ">
+        @*<span class="postData" style="margin-left:-15px;">Welcome to @Model.Forum.Title Forum</span>*@
+
+       
+        <form asp-controller="Post" asp-action="Search" method="post">
+            <div class="searchForm">
+                <input asp-for="SearchQuery" type="text" placeholder="Search..." class="searchBar" onfocus="clearThis(this)" />
+                <button type="submit" class="btn btn-forumSearch">
+                    <i class="material-icons">search</i>
+                </button>
+            </div>
+
+            <input asp-for="ForumId" type="hidden" name="id" />
+        </form>
+    </div>
+
+
+    <div class="row" id="forumIndexContent">
+        @if (Model.PostIndex.Any())
+        {
+            <table class="table table-hover table-bordered" id="forumIndexTable">
+                <tbody>
+
+                    @foreach (var post in Model.PostIndex)
+                    {
+                        <tr>
+                            <td>
+                                <div class="postData">
+                                    <div class="postTitle">
+                                        <a style="color:#eedfdf;" asp-action="Index" asp-controller="Post" asp-route-id="@post.PostId">@post.PostTitle</a>
+                                       <a style="color:#eedfdf;" asp-action="Topic" asp-controller="Forum" asp-route-id="@Model.ForumId"><span class="float-right bg-danger p-1">@Model.ForumTitle</span></a> 
+
+                                    </div>
+                                    <div class="forumSubTitle">
+                                        <a asp-controller="Profile" asp-action="Detail" asp-route-id="@post.AuthorId">
+                                            @post.AuthorName
+                                        </a>
+                                    </div>
+                                    <span class="postDate">@post.PostCreation</span>
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="forumPostCount">
+                                    <p style="color:#eedfdf;">Replies: @post.ReplyCount</p>
+
+                                </div>
+                            </td>
+                            <td>
+                                <div class="postDate">
+                                    <p style="color:#eedfdf;">@post.PostCreation</p>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+
+
+
+
+                </tbody>
+            </table>
+        }
+        else
+        {
+            @foreach (var post in Model.PostIndex)
+            {
+                <div class="noPosts">
+                    <i class="material-icons md-72">question_answer</i>
+                    <h3>
+                        It looks like there are no @post.ForumTitle posts yet.
+                        Why not <a asp-controller="Post" asp-action="Create" asp-route-id="@post.ForumId"><span>creating</span></a> one?
+                    </h3>
+                </div>
+            }
+
+        }
+
+    </div>
+
+</div>
+
+

@@ -1,0 +1,63 @@
+﻿@model Forum.ViewModels.Post.ForumTopic;
+
+
+<div class="app-main__outer">
+
+    <div class="tab-content">
+        <div class="tab-pane tabs-animation fade show active" id="tab-content-0" role="tabpanel">
+            <div class="row offset-md-1">
+                <div class="col-md-10">
+
+                    <div class="main-card mb-3 card">
+                        <h5 class="text-center pt-2">Home Work Creation</h5>
+
+                        <a class="float-left" style="margin-left:20px;margin-top:20px;" asp-action="Index">
+                            <i class="fas fa-arrow-left fa-2x"></i>
+                        </a>
+
+
+
+                        <div class="card-body">
+                            <form enctype="multipart/form-data" method="post" asp-action="Create">
+                                <div asp-validation-summary="All" class="text-danger"></div>
+
+                                <div class="form-group">
+                                    <label asp-for="ForumTitle" class="control-label">Forum Title</label>
+                                    <input asp-for="ForumTitle" class="form-control" />
+                                    <span asp-validation-for="ForumTitle" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="ForumDescription" class="control-label">Forum Description</label>
+                                    <input asp-for="ForumDescription" class="form-control" />
+                                    <span asp-validation-for="ForumDescription" class="text-danger"></span>
+                                </div>
+
+                                <div class="row" style="margin-left:3px;">
+                                    <label asp-for="ForumImageUrl" style="margin-right:7px;">Forum Image</label>
+                                    <div class="form-group">
+                                        <div class="btn btn-primary btn-icon-text">
+
+                                            <i class="fas fa-cloud-upload-alt"></i>
+                                            <input asp-for="ForumImageUrl" type="file" value="Upload" />
+                                            <span asp-validation-for="ForumImageUrl" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                               
+
+                                <div class="form-group">
+                                    <input type="submit" value="Create" class="btn btn-primary" />
+                                    <a class="btn btn-info">Go Back</a>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+

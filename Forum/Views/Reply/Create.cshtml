@@ -1,0 +1,39 @@
+﻿ @model Forum.ViewModels.PostReplyViewModel;
+
+<div class="container body-content">
+    <div class="row sectionHeader">
+        <div class="sectionHeading">
+            Reply to the @Model.PostTitle
+        </div>
+        <div class="forumLogo" style="background-image:url(@Model.ForumImageUrl);"></div>
+
+        <span id="headingBtn">
+            <a class="btn btn-back float-right" asp-controller="Post" asp-action="Index" asp-route-id="@Model.PostId">
+                Back to Post
+            </a>
+        </span>
+    </div>
+    <div  >
+        <h3>@Model.PostTitle</h3>
+        <p class="postData">@Model.PostContent</p>
+        <p>You`re submitting as @Model.AuthorName</p>
+    </div>
+    <form class="text-center" method="post" asp-action="AddReply">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="ReplyContent">Reply</label>
+            <textarea asp-for="ReplyContent"
+                      rows="20"
+                      class="form-control" style="width:100%;"
+                      placeholder="Your Reply.."></textarea>
+            <span asp-validation-for="ReplyContent"></span>
+
+        </div>
+
+        <button type="submit" id="submitReplyBtn" class="btn btn-submitPost">
+            Submit Reply
+        </button>
+        <input asp-for="PostId" type="hidden" />
+    </form>
+</div>

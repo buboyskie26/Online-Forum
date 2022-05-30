@@ -1,0 +1,310 @@
+﻿@model Forum.ViewModels.Post.PostIndexViewModel;
+ 
+@using System.Security.Claims;
+
+
+<div class="container body-content">
+    <div class="row postHeader">
+        <div>
+            <span class="postIndexTitle">@Model.PostTitle</span>
+        </div>
+
+        <span class="ml-2" id="headingBtn">
+            <a asp-controller="Forum" asp-action="Topic" asp-route-id="@Model.ForumId" class="btn btn-back">Back to @Model.ForumName Forum</a>
+        </span>
+
+    </div>
+
+    <div class="row" id="postIndexContent">
+        <div class="col-md-3">
+            <a class="text-white" asp-controller="Vote" asp-action="ViewPostVote" asp-route-id="@Model.PostId">
+                <span class="float-left text-success">View</span>
+
+            </a>
+            <div class="postAuthorImage rounded-circle mx-auto d-block" style="background-image:url(@Model.AuthorImageUrl); background-size:100%;"></div>
+
+            <div class="text-center">
+                <div>
+                    <a asp-controller="Profile" asp-action="Detail" asp-route-id="@Model.AuthorId">
+                        @Model.AuthorName
+                    </a>
+                </div>
+                <div>
+                    <span class="postDate text-center">@Model.PostCreation.ToShortDateString()</span>
+
+
+
+                    @if (Model.AuthorName != Context.User.Identity.Name)
+                    {
+                        <a asp-controller="Vote" asp-action="UpVote" asp-route-id="@Model.PostId">
+                            <span class="float-left text-primary">
+                                <i class="fas fa-arrow-up"></i> @Model.UpVoteCount
+                            </span>
+                        </a>
+                        <div>
+                            <a asp-controller="Vote" asp-action="DownVote" asp-route-id="@Model.PostId">
+                                <span class="float-left text-primary">
+                                    <i class="fas fa-arrow-down"></i> @Model.DownVoteCount
+
+                                </span>
+                            </a>
+
+                        </div>
+
+                    }
+                    @* IF THE POST`S VOTERS ID IS LOGGED IN, THE ABOVE CODE WILL BE SHOWN, IF NOT IT WOULDNT BEEN SHOWN *@
+                    @if (Model.VoteObj.Any())
+                    {
+                        foreach (var item in Model.VoteObj)
+                        {
+                            @if (item.VoteUpPost == true && item.VoteDownPost == null && item.AuthorName == Context.User.Identity.Name)
+                            {
+                                <div>
+                                    <span class="float-right text-success font-weight-bold">
+                                        Up Voted
+                                    </span>
+                                </div>
+                            }
+
+                            @if (item.VoteDownPost == true && item.VoteUpPost == null && item.AuthorName == Context.User.Identity.Name)
+                            {
+                                <div>
+                                    <span class="float-right text-danger font-weight-bold">
+                                        Down Voted
+                                    </span>
+                                </div>
+                            }
+                        }
+
+                    }
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-9 postContentContainer">
+            <div class="postContent">
+                @Model.PostContent
+            </div>
+        </div>
+
+    </div>
+    <div class="row" id="replyDivider"></div>
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div class="row mt-3 ">
+            <span class="mb-2 text-center">
+                <a asp-controller="Reply" asp-action="Create" asp-route-id="@Model.PostId" class="btn btn-sm btn-newReply">
+                    Post Reply
+                </a>
+            </span>
+        </div>
+    }
+
+    @if (Model.Replies.Any())
+    {
+        @foreach (var item in Model.Replies)
+        {
+            <div class="row" id="postIndexContent" style="margin-bottom:10px; font-family:'Roboto Mono';">
+                <div class="col-md-3">
+
+                    @*   @foreach (var hm in Model.VoteReply)
+        {
+            @if (hm.VoteUpReply == true && hm.VoteDownReply == null )
+            {
+                <span style="font-size:12px;" class="float-right text-success font-weight-bold">
+                    Up Voted
+                </span>
+            }
+
+            @if (hm.VoteDownReply == true && hm.VoteUpReply == null  )
+            {
+                <span style="font-size:12px;" class="float-right m-0 p-0 text-danger font-weight-bold">
+                    Down Voted
+                </span>
+            }
+        }*@
+
+                    <a class="text-white" asp-controller="VoteReply" asp-action="ViewReplyPostVote" asp-route-id="@item.ReplyId">
+                        <span class="float-left text-primary">View</span>
+
+                    </a>
+                    <div class="postAuthorImage rounded-circle mx-auto d-block" style="background-image:url(@item.AuthorImageUrl); background-size:100%;"></div>
+                    <div class="text-center">
+                        @if (item.AuthorName == Context.User.Identity.Name)
+                        {
+                            <div class="mt-1">
+                                <a asp-controller="Profile" asp-action="Detail" asp-route-id="@item.AuthorId">
+                                    You
+                                </a>
+
+                                @*<a asp-controller="VoteReply" asp-action="UpVoteReply" asp-route-id="@item.ReplyId">
+                        <span class="float-left text-success">
+                            <i class="fas fa-arrow-up"></i> @Model.VoteReply.Count(q => q.VoteUpReply == true)
+                        </span>
+                    </a>
+
+                    <div>
+                        <a asp-controller="VoteReply" asp-action="DownVoteReply" asp-route-id="@item.ReplyId">
+                            <span class="float-left text-success">
+                                <i class="fas fa-arrow-down"></i> @Model.VoteReply.Count(q => q.VoteDownReply == true)
+
+                            </span>
+                        </a>
+
+                    </div>*@
+
+                            </div>
+
+
+                        }
+                        else
+                        {
+                            <div>
+                                <a style="margin-left:-2px;" asp-controller="Profile" asp-action="Detail" asp-route-id="@item.AuthorId">
+                                    @item.AuthorName
+                                </a>
+
+
+                                @* check if vote reply count are in the user who created that vote reply *@
+                                @*    @if (Model.VReplyObj.VoteUpReply == true && Model.VReplyObj.VoteDownReply == null && Model.VReplyObj.ReplyId == item.ReplyId)
+                    {
+                        <a asp-controller="VoteReply" asp-action="UpVoteReply" asp-route-id="@Model.VReplyObj.ReplyId">
+                            <span class="float-left text-success">
+                                <i class="fas fa-arrow-up"></i> @Model.VReplyObj.VoteUpReply
+                            </span>
+                        </a>
+                    }*@
+
+                                @* --------------------------*@
+                                @*  @foreach (var hm in Model.VoteReply)
+                    {
+                        @if (hm.VoteUpReply == true && hm.VoteDownReply == null && item.ReplyId == hm.ReplyId)
+                        {
+                            <a asp-controller="VoteReply" asp-action="UpVoteReply" asp-route-id="@item.ReplyId">
+                                <span class="float-left text-success">
+                                    <i class="fas fa-arrow-up"></i> @Model.VoteReply.Count(q => q.VoteUpReply == true)
+                                </span>
+                            </a>
+
+                        }
+                        else
+                        {
+                            <a asp-controller="VoteReply" asp-action="UpVoteReply" asp-route-id="@item.ReplyId">
+                                <span class="float-left text-success">
+                                    <i class="fas fa-arrow-up"></i> 0
+                                </span>
+                            </a>
+                        }
+
+                        @if (hm.VoteDownReply == true && hm.VoteUpReply == null && item.ReplyId == hm.ReplyId)
+                        {
+
+                            <div>
+                                <a asp-controller="VoteReply" asp-action="DownVoteReply" asp-route-id="@item.ReplyId">
+                                    <span class="float-left text-success">
+                                        <i class="fas fa-arrow-down"></i> @Model.VoteReply.Count(q => q.VoteDownReply == true)
+
+                                    </span>
+                                </a>
+                            </div>
+
+                        }
+                        else
+                        {
+                            <div>
+                                <a asp-controller="VoteReply" asp-action="DownVoteReply" asp-route-id="@item.ReplyId">
+                                    <span class="float-left text-success">
+                                        <i class="fas fa-arrow-down"></i> 0
+
+                                    </span>
+                                </a>
+                            </div>
+
+                        }
+                    }*@
+
+                                @* Check if the upvote is belong the the replyvoter *@
+
+                                @*  `@foreach (var rep in Model.VoteReply)
+                    {
+                        if (item.ReplyId > 0 && item.ReplyId == rep.ReplyId)
+                        {
+                            <a asp-controller="VoteReply" asp-action="UpVoteReply" asp-route-id="@item.ReplyId">
+                                <span class="float-left text-success">
+                                    <i class="fas fa-arrow-up"></i> @Model.VoteReply.Count(q => q.AuthorId.Contains("d"))
+                                </span>
+                            </a>
+
+                            <div>
+                                <a asp-controller="VoteReply" asp-action="DownVoteReply" asp-route-id="@item.ReplyId">
+                                    <span class="float-left text-success">
+                                        <i class="fas fa-arrow-down"></i> @Model.VoteReply.Count(q => q.VoteDownReply == true)
+
+                                    </span>
+                                </a>
+
+                            </div>
+                        }
+
+                        if (item.ReplyId > 0 && item.ReplyId != rep.ReplyId)
+                        {
+                            <a asp-controller="VoteReply" asp-action="UpVoteReply" asp-route-id="@item.ReplyId">
+                                <span class="float-left text-success">
+                                    <i class="fas fa-arrow-up"></i>
+                                </span>
+                            </a>
+
+                            <div>
+                                <a asp-controller="VoteReply" asp-action="DownVoteReply" asp-route-id="@item.ReplyId">
+                                    <span class="float-left text-success">
+                                        <i class="fas fa-arrow-down"></i>
+
+                                    </span>
+                                </a>
+
+                            </div>
+                        }
+
+                    }*@
+
+                                <a asp-controller="VoteReply" asp-action="LikeReply" asp-route-id="@item.ReplyId">
+                                    <span class="float-left text-success">
+                                        <i class="fas fa-arrow-up"></i> @item.LikeCount
+                                    </span>
+                                </a>
+
+                                <div>
+                                    <a asp-controller="VoteReply" asp-action="UnLikeReply" asp-route-id="@item.ReplyId">
+                                        <span class="float-left text-success">
+                                            <i class="fas fa-arrow-down"></i> @item.UnLikeCount
+
+                                        </span>
+                                    </a>
+
+                                </div>
+                            </div>
+                        }
+
+                        <div>
+                            <span class="postDate">@item.ReplyCreation</span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-md-9 postContentContainer" style="font-family:'Roboto';">
+                    <div class="postContent">
+                        @item.ReplyContent
+                    </div>
+                </div>
+
+            </div>
+
+        }
+    }
+</div>
+
+

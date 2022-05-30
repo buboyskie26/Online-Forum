@@ -1,0 +1,71 @@
+﻿@model Forum.ViewModels.HomeIndexViewModel;
+
+
+
+
+<div class="container body-content">
+    <div class="frontPageSplash">
+        <div class="frontPageLearn">
+            <div class="col-md-6">
+                <div style="font-size:3.2em;  font-family:'Roboto Mono';">
+                    Learn together, Keeping forward together.
+                </div>
+                <p style="font-size:1.8em;  ">LambdaForums is the world's fastest growing coding forum</p>
+                <div>
+                    <form asp-controller="Search" asp-action="Search" method="post">
+                        <input asp-for="SearchQuery" type="text" class="homeSearch" placeholder="Search..." />
+
+                    
+                    </form>
+                </div>
+            </div>
+
+            
+            <div class="col-md-6">
+
+            </div>
+        </div>
+        
+        
+    </div>
+
+        <div class="frontPageContent" style="margin-top:80px;">
+            <h3 id="latestPosts">Latest Posts:</h3>
+
+            <table class="table table-hover table-bordered">
+                <tbody>
+                    @foreach (var item in Model.Post)
+                    {
+                        <tr>
+                            <td>
+                                <div class="forumLogo" style="background-image:url(@item.Forum.ImageUrl);"></div>
+                                <div class="postTitle">
+                                    <a style="color:#3b76a1;" asp-action="Index" asp-route-id="@item.PostId" asp-controller="Post">@item.PostTitle</a>
+
+                                </div>
+                                <div class="postSubTitle">
+                                    @if (item.RepliesCount == 1)
+                                    {
+                                        <p class="postData">@item.RepliesCount reply</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="postData">No reply</p>
+
+                                    }
+                                    <span class="Postus">
+                                        <a style="color: whitesmoke;" asp-controller="Profile" asp-action="Detail" asp-route-id="@item.AuthorId">
+                                            @item.AuthorName
+
+                                        </a>
+                                    </span>
+                                </div>
+
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>

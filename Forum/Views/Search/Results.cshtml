@@ -1,0 +1,75 @@
+﻿@model Forum.ViewModels.Search.SearchResultModel;
+@{
+    ViewData["Title"] = "Results";
+}
+
+<div class="container body-content">
+    <div class="row sectionHeader">
+        <div class="sectionHeading">
+
+
+            <span>Search results for @Model.SearchQuery</span>
+             <form asp-action="Search" method="post">
+                 <div class="searchForm">
+                     <input asp-for="SearchQuery" class="searchBar" type="text"/>
+                     <button type="submit" class="btn btn-forumSearch">
+                         <i class="material-icons">search</i>
+
+                     </button>
+                 </div>
+             </form>
+            
+        </div>
+
+    </div>
+    <div class="frontPageContent" style="margin-top:80px;">
+        @if (Model.EmptySearch == false)
+        {
+            <h3 id="latestPosts">Latest Posts:</h3>
+
+            <table class="table table-hover table-bordered">
+                <tbody>
+                    @foreach (var item in Model.Posts)
+                    {
+                        <tr>
+                            <td>
+                                <div class="forumLogo" style="background-image:url(@item.Forum.ImageUrl);"></div>
+                                <div class="postTitle">
+                                    <a style="color:#3b76a1;" asp-action="Index" asp-route-id="@item.PostId" asp-controller="Post">@item.PostTitle</a>
+
+                                </div>
+                                <div class="postSubTitle">
+                                    @if (item.ReplyCount == 1)
+                                    {
+                                        <p class="postData">@item.ReplyCount reply</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="postData">No reply</p>
+
+                                    }
+                                    <span class="Postus">
+                                        <a style="color: whitesmoke;" asp-controller="Profile" asp-action="Detail" asp-route-id="@item.AuthorId">
+                                            @item.AuthorName
+
+                                        </a>
+                                    </span>
+                                </div>
+
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table> }
+        else
+        {
+            <div class="noPosts text-center">
+                <i class="material-icons md-72">question_answer</i>..
+
+                <h3>No search results found for "@Model.SearchQuery"</h3><span>..</span>
+            </div>
+        }
+
+    </div>
+</div>

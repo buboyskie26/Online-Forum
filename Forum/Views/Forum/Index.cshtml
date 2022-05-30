@@ -1,0 +1,56 @@
+﻿@model Forum.ViewModels.Forum.ForumIndexViewModel;
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row " id="forumIndexContent">
+    <table class="table table-hover table-bordered" id="forumIndexTable">
+        <tbody>
+            @foreach (var forum in Model.ForumList)
+            {
+                <tr>
+                    <td>
+                        <div class="forumLogo" style="background-image: url(@forum.ImageUrl); background-size:100%"></div>
+                        <div class="forumData  ">
+                            <div class="forumTitle">
+                                <a asp-action="Topic" asp-route-id="@forum.Id" asp-controller="Forum">
+                                    @forum.Title
+                                </a>
+                            </div>
+                           @* <div class="forumSubTitle">
+                                @if (forum.HasRecentPost)
+                                {
+                                    <div class="hasRecentPost">Hot</div>
+                                }
+                            </div>*@
+                        </div>
+                    </td>
+                    <td>
+                        <div class="forumPostCount">
+                            @forum.PostCount Post(s)
+                        </div>
+                        <div class="forumMemberCount">
+                            @forum.UserCount User(s)
+                        </div>
+                    </td>
+            @*        <td>
+                        <div class="forumPostCount">
+                            @forum.NumberOfPosts Posts
+                        </div>
+                        <div class="forumMemberCount">
+                            @forum.NumberOfUsers Users
+                        </div>
+                    </td>*@
+                    <td>
+                        <div class="forumDescription">
+                            @forum.Description
+                        </div>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</div>
+
+

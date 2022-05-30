@@ -1,0 +1,95 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using Forum.Data;
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Forum</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+
+    <link rel="stylesheet" href="~/css/all.min.css">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Mono" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Forum</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    @* <partial name="_LoginPartial" />*@
+                    <ul class="nav navbar-nav">
+                        <li><a asp-controller="Forum" asp-action="Index">Forums</a></li>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle ml-3 btn-sm btn btn-success text-white" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Settings<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li role="separator" class="divider"></li>
+                                    <li class="dropdown-header">Profile</li>
+                                    <li class="dropdown-header"><a asp-controller="Profile" asp-action="Detail" asp-route-id="@UserManager.GetUserId(User)">My Profile</a></li>
+
+                                    <li class="dropdown-header"><a asp-controller="Post" asp-action="MyPost" >My Post(s)</a></li>
+
+
+                                    <li role="separator" class="divider"></li>
+                                    <li class="dropdown-header">Admin</li>
+                                    <li class="dropdown-header"><a asp-controller="Forum" asp-action="Create">Create Forum</a></li>
+                                    <li class="dropdown-header"><a asp-controller="Profile" asp-action="Index">Users</a></li>
+
+                                </ul>
+                            </li>
+                        }
+                    </ul>
+                    @if (!SignInManager.IsSignedIn(User))
+                    {
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="mr-2"><a class="text-white" asp-controller="Account" asp-action="Login">Sign In</a></li>
+                            <li class="mr-2"><a class="text-white" asp-controller="Account" asp-action="Register">Register</a></li>
+                        </ul>
+                    }
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm" class="navbar-right">
+                            <ul class="nav navbar-nav navbar-right">
+                                <li>
+                                    <a class="btn text-white btn-link navbar-btn navbar-link" asp-controller="Profile" asp-action="Detail" asp-route-id="@UserManager.GetUserId(User)">@UserManager.GetUserName(User)!</a>
+                                </li>
+                                <li>
+                                    <button type="submit" class="btn btn-link navbar-btn navbar-link" style="font-weight: bold">Log out</button>
+                                </li>
+                            </ul>
+                        </form>
+                    }
+                </div>
+
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2022 - Forum - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

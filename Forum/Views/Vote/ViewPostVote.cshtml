@@ -1,0 +1,54 @@
+﻿@model Forum.ViewModels.Votex.ViewVotePost
+@{
+    ViewData["Title"] = "ViewPostVote";
+}
+
+
+<div class="row" id="forumIndexContent">
+    <table class="table table-hover table-bordered" id="forumIndexTable">
+        <tbody>
+            @foreach (var forum in Model.ViewListPost)
+            {
+                <tr>
+                    <td style="width:380px;">
+                        <div class="forumLogo" style="background-image: url(@forum.AuthorImageUrl); background-size:100%"></div>
+                        <div class="forumData">
+                            <div class="forumTitle">
+                                <a asp-action="Detail" asp-route-id="@forum.AuthorId" asp-controller="Profile">
+                                    @forum.AuthorName
+                                </a>
+                            </div>
+                         
+                        </div>
+                    </td>
+                    <td class="text-center" style="width:300px;">
+                        @if (forum.VoteUpPost == true)
+                        {
+                            <div class="forumDescription">
+                                <span class="text-primary mr-2">
+                                    <i class="fas fa-arrow-up"></i>
+                                </span> <span class="text-success font-weight-bold">Up Vote</span> <span style="color:grey;">@forum.VoteCreated.ToShortDateString()</span>
+                            </div>
+                        }
+                        @if (forum.VoteDownPost == true)
+                        {
+                            <div class="forumDescription">
+                                <span class="text-danger mr-2">
+                                    <i class="fas fa-arrow-down"></i>
+                                </span> <span class="text-success font-weight-bold">Up Vote</span> <span style="color:grey;">@forum.VoteCreated.ToShortDateString()</span>
+                            </div>
+                        }
+
+                    </td>
+ 
+                    <td class="text-center">
+                        <div class="forumDescription">
+                            @Model.PostTitle
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
